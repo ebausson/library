@@ -1,13 +1,22 @@
 var User = exports;
 
-User.authenticate = function(request) {
-	var username = request.user;
-	var password = request.pass;
-	console.log("*** Login attempt : " + request);
-	// todo : login
-	return username == password;
+User.authenticate = function(request, parameters) {
+	var username = parameters.user;
+	var password = parameters.pass;
+	console.log("*** Login attempt : ");
+	console.log(parameters);
+	//TODO : login
+	if (username == password) {
+		return true;
+	}
+	return false;
 }
 
 User.getLibrary = function() {
 	return {};
+}
+
+User.isAuth = function(req, res){
+	console.log(req.session);
+	return false;
 }
