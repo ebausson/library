@@ -2,7 +2,7 @@ var connect = require("connect");
 var User = require('./User.js');
 
 var server = connect.createServer(
-	connect.favicon('static/favicon.ico'),
+	connect.favicon('/static/favicon.ico'),
 	connect.logger(":status   :date - :url"),
 	connect.basicAuth(function(user, pass){
 		return User.authenticate({ user: user, pass: pass });
