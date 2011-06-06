@@ -7,3 +7,7 @@ User.authenticate = function(request) {
 	// todo : login
 	return username == password;
 }
+
+User.getLibrary = function() {
+	return {};
+}
