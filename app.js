@@ -1,9 +1,15 @@
-var connect = require("connect");				// connect middleware
+// node API
 var fs = require("fs");							// filesystem API
 var url = require("url");						// URL parsing API
 
+// node modules
+var connect = require("connect");				// connect middleware
+var couchdb = require('couchdb');				// noSQL database
 
-var User = require('./User.js');
+// application modules
+var User = require('./js/User.js');
+
+
 
 
 var DEBUG = true;
@@ -14,6 +20,12 @@ var server = connect.createServer(
     connect.cookieParser(),
     connect.session({secret:'some secret String'})
 );
+
+
+var dbNamespace	= 'library_';
+var dbProvider	= couchdb.createClient(5984, '127.0.0.1');
+var db			= dbProvider.db(dbNamespace + 'db');
+
 
 
 
