@@ -18,7 +18,7 @@ UserManager.handleRequest = function(req, res, db) {
     }
     
     // else if user isn't logged, send an error
-    if ( ! logged ) {
+    if ( ! isLogged ) {
         res.writeHead(401, {"Content-Type": "text/plain"});
         return {success : false, type : 'session', msg : 'Not logged'};
     }
