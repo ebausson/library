@@ -1,16 +1,18 @@
 Ext.application({
     name: 'HelloExt',
     launch: function() {
-        Ext.Ajax.request({
+        Library.Ajax.request({
             url: '/user/isLogged',
             success: function(response){
                 console.log(response);
-                //TODO
-                Ext.create('Library.user.authenticationPanel', {});
+                if (responseContent.isLogged) {
+                    //TODO : display application
+                } else {
+                    Ext.create('Library.user.AuthenticationPanel', {});
+                }
             },
             failure: function(response){
-                console.log(response);
-                //TODO
+                Ext.create('Library.user.AuthenticationPanel', {});
             }
         });
     }

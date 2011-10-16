@@ -1,5 +1,5 @@
-Ext.define('Library.user.authenticationPanel', {
-
+Ext.define('Library.user.AuthenticationPanel', {
+    // have to fix this
     config: {
         xtype  : 'panel',
         layout: {
@@ -11,7 +11,8 @@ Ext.define('Library.user.authenticationPanel', {
             html     : 'toto',
             position : 'center',
             height   : 250,
-            width    : 200
+            width    : 200,
+            flex : 1
             
         
         }]
