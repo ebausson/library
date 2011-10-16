@@ -7,7 +7,7 @@ var connect = require("connect");                // connect middleware
 var couchdb = require('couchdb');                // noSQL database
 
 // application modules
-var User = require('./js/UserManager.js');
+var UserManager = require('./js/user/UserManager.js');
 
 
 
@@ -34,35 +34,27 @@ var db          = dbProvider.db(dbNamespace + 'db');
 // **  dispatching requests  **
 // ****************************
 
-// static file serving
+// serving static file
 server.use("/static", connect.static(__dirname + '/static'));
 
 
-// authentication request handling
-server.use("/auth", function(req, res) {
-    var parameters = getParameters(req.url);
-    var response = User.authenticate(db, parameters.user, parameters.password);
-    if (! response.success) {
-        res.writeHead(401, {"Content-Type": "text/plain"});
-    }
-    res.end(JSON.stringify(response));
+// user management
+server.use("/user", function(req, res) {
+    var result = UserManager.handleRequest(req, res, db);
+    res.end(JSON.stringify(result));
     return;
 });
-
-server.use("/account/create", function(req, res) {
-    var parameters = getParameters(req.url);
-    var response = User.createAccount(db, parameters.user, parameters.password);
-    
-    res.end(JSON.stringify(response));
-    return;
-});
-
 
 // other requests
 server.use("/request", function(req, res) {
-    User.isAuth(req, res) | function(req, res) {
-    //TODO
-    res.end("TODO")}();
+    if (! UserManager.isUserAuth(req, res)) {
+        //TODO
+        res.end("TODO");
+        return;
+    };
+    
+    // starting here, we are sure
+    
 });
 
 
@@ -102,11 +94,11 @@ function getIndex(req, res) {
         indexPage += '\n';
         indexPage += '<!-- scripts -->\n';
         indexPage += '<script type="text/javascript" src="static/ext-4.0.2a/ext-all-debug-w-comments.js"></script>\n';
-        indexPage += '<script type="text/javascript" src="static/app.js"></script>\n';
         var jsFiles = fs.readdirSync(__dirname + jsFilesDir);
         for (var i in jsFiles) {
             indexPage += '<script type="text/javascript" src="' +jsFilesDir + jsFiles[i] + '"></script>\n';
         }
+        indexPage += '<script type="text/javascript" src="static/bootstrap.js"></script>\n';
         indexPage += '\n';
         indexPage += '</head>\n';
         indexPage += '<body></body>\n';
@@ -115,37 +107,4 @@ function getIndex(req, res) {
     
     res.end(indexPage);
     return;
-    
-    
-    // Old Version
-    /*
-    var filename = __dirname + "/index.html";
-    
-    fs.readFile(filename, function(err, file) {
-        if(err) {
-            console.log(err);
-            res.writeHead(500, {"Content-Type": "text/plain"});
-            res.end(err + "\n");
-            return;
-        } else {
-            res.writeHead(200, {"Content-Type" : "text/html"});
-            res.end(file);
-        }
-    });
-    */
 };
-
-function getParameters(url) {
-    var response = {};
-    var query = url.split('?')[1];
-    if (query) {
-        queryEntries = query.split('&');
-        for (var i = 0; i < queryEntries.length; i++) {
-            var splittedQueryEntry = queryEntries[i].split('=');
-            if (splittedQueryEntry[1]) {
-                response[splittedQueryEntry[0]] = splittedQueryEntry[1];
-            }
-        }
-    }
-    return response;
-}
