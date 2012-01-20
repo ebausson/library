@@ -8,11 +8,12 @@ Ext.application({
                 if (responseContent.isLogged) {
                     //TODO : display application
                 } else {
-                    Ext.create('widget.authentication', {});
+                    Ext.create('library.authentication', {}).show();
                 }
             },
             failure: function(response){
-                Ext.create('widget.authentication', {});
+            
+                Ext.create('library.authentication', {}).show();
             }
         });
     }

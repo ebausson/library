@@ -1,34 +1,51 @@
 Ext.define('Library.user.AuthenticationWidget', {
-    extend: 'Ext.container.Viewport',
-    alias: 'widget.authentication',
-    layout: {
-        type: 'hbox',
-        align: 'stretch'
+    extend: 'Ext.window.Window',
+    alias: 'library.authentication',
+    locale: {
+        title: 'Authentication',
+        login: 'login',
+        password: 'password',
+        submit: 'Submit'
     },
-    items: [{
-        region: 'north',
-        flex: 1
-    }, {
-        region: 'west',
-        flex: 1
-        // could use a TreePanel or AccordionLayout for navigational items
-    }, {
-        region: 'south',
-        flex: 1
-    }, {
-        region: 'east',
-        flex: 1
-    }, {
-        region: 'center',
-        xtype: 'panel',    // TabPanel itself has no title
-        items: [{
-            title: 'Default Tab',
-            html: 'The first tab\'s content. Others may be added dynamically'
-        }]
-    }],
-
-    constructor: function(config) {
-        this.initConfig(config);
-        return this;
+    initComponent: function(){
+        var config = {
+            title: this.locale.title,
+            items: [{
+                xtype: 'form',
+                defaults: {
+                    margin: 5
+                },
+                items: [{
+                    xtype: 'field',
+                    fieldLabel: this.locale.login,
+                    name: 'login'
+                },{
+                    xtype: 'field',
+                    fieldLabel: this.locale.password,
+                    name: 'password'
+                }],
+                buttons: [{
+                    text: this.locale.submit,
+                    formBind: true, //only enabled once the form is valid
+                    disabled: true,
+                    handler: function() {
+                        var form = this.up('form').getForm();
+                        if (form.isValid()) {
+                            form.submit({
+                                success: function(form, action) {
+                                   Ext.Msg.alert('Success', action.result.msg);
+                                },
+                                failure: function(form, action) {
+                                    Ext.Msg.alert('Failed', action.result.msg);
+                                }
+                            });
+                        }
+                    }
+                }],
+            }]
+        };
+        Ext.apply(this, Ext.apply(this.initialConfig, config));
+        
+        this.callParent(arguments);
     }
 });

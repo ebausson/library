@@ -24,7 +24,8 @@ UserManager.handleRequest = function(req, res, db) {
     }
     
     // logged user request management
-    //TODO
+    //TODO : requests to manage account
+    
     
     // unknown request
     return {success : false, type : 'session', msg : 'Not logged'};
@@ -45,8 +46,11 @@ UserManager.authenticate = function(query, db) {
     }
     
     console.log("*** Login attempt by : " + username);
+    db.get(username, function (err, doc) {
+        console.log(err);
+        console.log(doc);
+    });
     //TODO
-    
     return response;
 }
 

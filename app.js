@@ -4,7 +4,7 @@ var url = require("url");                        // URL parsing API
 
 // node modules
 var connect = require("connect");                // connect middleware
-var couchdb = require('couchdb');                // noSQL database
+var cradle = require('cradle');                  // noSQL database
 
 // application modules
 var UserManager = require('./js/user/UserManager.js');
@@ -24,8 +24,8 @@ var server = connect.createServer(
 
 
 var dbNamespace = 'library_';
-var dbProvider  = couchdb.createClient(5984, '127.0.0.1');
-var db          = dbProvider.db(dbNamespace + 'db');
+var dbProvider  = new(cradle.Connection)();
+var db          = dbProvider.database(dbNamespace + 'db');
 
 
 
