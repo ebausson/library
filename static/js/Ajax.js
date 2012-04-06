@@ -4,13 +4,13 @@ Library = {
             //store the initial callbacks
             var success = options.success;
             var failure = options.failure;
-            
-            
+
+
             Ext.apply(options, {
                 success : function(response, requestOptions){
                     var jsonResponse;
                     try{
-                        jsonResponse = Ext.util.JSON.decode(response.responseText);
+                        jsonResponse = Ext.JSON.decode(response.responseText);
                     } catch(e) { // responseText is not JSON
                         jsonResponse = {
                             success : false,
@@ -18,7 +18,7 @@ Library = {
                             errorMsg : "Invalid server response."
                         };
                     }
-                    
+
                     if(jsonResponse.success && success){
                         success.call(options.scope, jsonResponse, requestOptions);
                     }else if (failure) {
@@ -37,12 +37,12 @@ Library = {
                             jsonResponse.errorType = 'connection';
                             jsonResponse.errorMsg = "Unknown error.";
                         }
-                        
+
                         failure.call(options.scope || window, jsonResponse, requestOptions);
                     }
                 }
             });
-            
+
             //encode the parameters if object
             var params = options.params;
             Ext.iterate(params, function(key, value){
@@ -50,7 +50,7 @@ Library = {
                     params[key] = Ext.encode(value);
                 }
             });
-            
+
             // finally submit request
             Ext.Ajax.request(options);
         }
